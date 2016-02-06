@@ -47,11 +47,12 @@ public class NoteRepository {
 				note.setNoteContent(entity.getProperty("noteContent").toString());
 			if(entity.getProperty("flag")!=null)
 				note.setFlag((Boolean)entity.getProperty("flag"));
-			/*if(entity.getProperty("noteImage")!=null)
+			if(entity.getProperty("noteImage")!=null)
 			{
 				Blob blob=(Blob)entity.getProperty("noteImage");
+				System.out.println(DatatypeConverter.printBase64Binary(blob.getBytes()));
 				note.setNoteImage(DatatypeConverter.printBase64Binary(blob.getBytes()));
-			}*/
+			}
 				
 			notes.add(note);
 		}
@@ -76,7 +77,8 @@ public class NoteRepository {
 		}
 		System.out.println(note.getNoteContent()+note.getNoteDate()+note.getNoteTitle()+noteId);
 		//converting base64 encoded image string data to byte array
-        //byte[] imageBytes =  DatatypeConverter.parseBase64Binary(note.getNoteImage());
+		System.out.println(note.getNoteImage());
+        byte[] imageBytes =  DatatypeConverter.parseBase64Binary(note.getNoteImage());
 		//Using GAE datastore
 		Key noteKey = KeyFactory.createKey("Note", noteId);
 	    Entity noteEntity = new Entity("Note", noteKey);
@@ -86,7 +88,7 @@ public class NoteRepository {
 	    noteEntity.setProperty("noteDate", note.getNoteDate());
 	    noteEntity.setProperty("flag", note.getFlag());
 	    noteEntity.setProperty("noteServerDate",new Date());
-	   // noteEntity.setProperty("noteImage", new Blob(imageBytes));
+	    noteEntity.setProperty("noteImage", new Blob(imageBytes));
 	    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 	    datastore.put(noteEntity);
 		status.setNoteTitle(note.getNoteTitle());

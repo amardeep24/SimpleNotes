@@ -21,8 +21,8 @@ main.config(['$routeProvider', function($routeProvider) {
 
 main.controller('composeController',function($scope,$http,noteSavingService)
 		{
-			//$scope.image={};
-			//$scope.image.show=false;
+			$scope.image={};
+			$scope.image.show=false;
 			$scope.save=function()
 				{
 					$scope.note={};
@@ -30,7 +30,7 @@ main.controller('composeController',function($scope,$http,noteSavingService)
 					$scope.note.noteContent=$scope.noteContent;
 					$scope.note.noteDate=getDate();
 					$scope.note.flag=true;
-					//$scope.note.noteImage=$scope.image.result;
+					$scope.note.noteImage=$scope.image.result;
 					noteSavingService.saveNote($scope.note)
 					.success(function (result)
 					        {
@@ -38,7 +38,7 @@ main.controller('composeController',function($scope,$http,noteSavingService)
 			        	$scope.msg="compose_note_status_success";
 			        	$scope.noteTitle=null;
 			        	$scope.noteContent=null;
-			        	//$scope.image.show=false;
+			        	$scope.image.show=false;
 			        });
 				}
 			$scope.clear=function()
@@ -48,7 +48,7 @@ main.controller('composeController',function($scope,$http,noteSavingService)
 					$scope.result=null;
 					$scope.note={};
 				}
-			/*$scope.uploadFile=function(files)
+			$scope.uploadFile=function(files)
 			{
 						var reader=new FileReader();
 						reader.onload=function(file)
@@ -60,7 +60,7 @@ main.controller('composeController',function($scope,$http,noteSavingService)
 								});
 								}
 						reader.readAsDataURL(files[0]);
-			}*/
+			}
 			
 		});
 main.controller('viewController',function($scope,$http,$window,deleteNoteService,editNoteService)
@@ -73,10 +73,10 @@ main.controller('viewController',function($scope,$http,$window,deleteNoteService
 		        })
 		        .success(function (result)
 		        {
-		        	/*for(var i=0;i<result.length;i++)
+		        	for(var i=0;i<result.length;i++)
 		        		{
 		        			result[i].noteImage=formatImageUrl(result[i].noteImage);
-		        		}*/
+		        		}
 		        	$scope.notes = result;
 		        });
 			 $scope.delete=function(note)
@@ -214,7 +214,7 @@ function getDate()
     return today;
 
 }
-/*function encodeURL(str){
+function encodeURL(str){
     return str.replace(/\+/g, '-').replace(/\//g, '_').replace(/\=+$/, '');
 }
 function decodeUrl(str){
@@ -229,4 +229,3 @@ function formatImageUrl(str)
     var pre=data.substring(0,base).concat(";").concat(data.substring(base));
     return (pre.substring(0,pre.indexOf("4")+1).concat(new String(",").concat(pre.substring(pre.indexOf("4")+1)))).concat("=");
 }
-*/

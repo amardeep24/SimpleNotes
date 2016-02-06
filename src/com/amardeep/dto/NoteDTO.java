@@ -16,7 +16,7 @@ public class NoteDTO
 	
 	private Boolean flag;
 	
-	/*private String noteImage;
+	private String noteImage;
 
 	public String getNoteImage() {
 		return noteImage;
@@ -25,7 +25,7 @@ public class NoteDTO
 	public void setNoteImage(String noteImage) {
 		this.noteImage = noteImage;
 	}
-*/
+
 	public Boolean getFlag() {
 		return flag;
 	}
