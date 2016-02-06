@@ -1,0 +1,23 @@
+<h3 class="compose_note_header">Create new note:</h3>
+<b class={{msg}}>{{result.status}} {{result.noteTitle}}</b><br/>
+<label>Note title : </label>
+<br/>
+<br/>
+<input class="compose_note_title" type="text" data-ng-model="noteTitle" placeholder="Enter note title..." size="79">
+<br/>
+<br/>
+<label>Note : </label>
+<br/>
+<br/>
+<textarea data-ng-model="noteContent" rows="20" cols="80" class="compose_note_content"placeholder="Enter note text..."></textarea>
+<br/>
+<!-- <input type="file" onchange="angular.element(this).scope().uploadFile(this.files)">
+<br/>
+<br/>
+<img data-ng-src="{{image.result}}" class="compose_note_thumbnail" data-ng-show="image.show" >
+<br/>
+<br/> -->
+<button data-ng-click="save()" class="compose_note_button">Save</button>
+<button data-ng-click="clear()"class="compose_note_button">Clear</button>
+
+

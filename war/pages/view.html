@@ -1,0 +1,35 @@
+<h3 class="view_notes_header">Notes saved:</h3>
+<input class="view_notes_search_box" type="text" data-ng-model="searchString" placeholder="Type to search...">
+<br/>
+<br/>
+<span class="compose_note_status_success">{{result.noteTitle}}{{result.status}}</span>
+<br/>
+<ul class="view_note_ul">
+	<li data-ng-repeat="note in notes | filter:searchString" class="view_note_li">
+	<div data-ng-show="note.flag">
+	<b>Title:{{note.noteTitle}}</b>
+	<button class="view_notes_delete" data-ng-click="edit(note)"><em>Edit</em></button>
+	<button class="view_notes_delete" data-ng-click="delete(note)"><em>Delete</em></button>
+	<br/>
+	{{note.noteDate}}
+	<hr style="margin-right: 60%">
+	<em>{{note.noteContent}}</em>
+	<!-- <img data-ng-src="{{note.noteImage}}" class="compose_note_thumbnail">
+	{{note.noteImage}} -->
+	</div>
+	<div data-ng-hide="note.flag">
+		<label>Note title : </label>
+		<br/>
+		<input class="compose_note_title" type="text" data-ng-model="note.noteTitle" value="note.noteTitle">
+		<br/>
+		<label>Note : </label>
+		<br/>
+		<textarea data-ng-model="note.noteContent" value="note.noteContent" rows="20" cols="80" class="compose_note_content" ></textarea>
+		<br/>
+		<button data-ng-click="save(note)" class="compose_note_button">Save</button>
+		<button data-ng-click="clear(note)"class="compose_note_button">Clear</button>
+		<button data-ng-click="cancel(note)" class="compose_note_button">Cancel</button>
+	</div>
+	</li>
+	
+</ul>

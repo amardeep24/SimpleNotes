@@ -1,0 +1,79 @@
+.view_notes_search_box
+{
+	border-radius:4px;
+	border:1px solid #bbb;
+}
+.view_notes_delete{
+	text-shadow:gray;
+	background-color:transparent;
+	border:none;
+	float:right;
+}
+.view_notes_delete:hover{
+	background-color:#00aaff;
+	color:white;;
+}
+.view_note_li{
+	 background-color: #f0f0f0;
+	 box-shadow: 1px 1px 2px #777;
+	 margin-bottom:2%;
+}
+.view_note_ul{
+	 list-style-type: none;
+	 margin-right:15%;
+     padding: 0;
+}
+.view_notes_header{
+	margin-top:0;
+	margin-right:15%;
+}
+.compose_note_header{
+	margin-top:0;
+	margin-right:15%;
+}
+.compose_note_status_success{
+	color: green;
+}
+.compose_note_title{
+	width:50%;
+	height:30px;
+	border-radius:4px;
+	border:1px solid #bbb;
+}
+.compose_note_content{
+	width:50%;
+	border-radius:4px;
+	border:1px solid #bbb;
+}
+.compose_note_button:hover{
+	background-color: #00aaff;
+}
+.compose_note_thumbnail
+{
+	height: 100px;
+    border: 1px solid #000;
+    margin: 10px 5px 0 0;
+}
+.heading {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    width: 15%;
+    background-color: #f1f1f1;
+    position: fixed;
+    height: 100%;
+    overflow: auto;
+}
+
+
+.item{
+  	display: block;
+    color: #000;
+    padding: 8px 0 8px 16px;
+    text-decoration: none;
+}
+
+.item:hover{
+    background-color: #ffA233;
+    color: white;
+}
