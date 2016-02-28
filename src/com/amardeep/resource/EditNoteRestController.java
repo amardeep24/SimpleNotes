@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.amardeep.dto.NoteDTO;
+import com.amardeep.dto.StatusDTO;
 import com.amardeep.service.UserService;
 
 @Controller
@@ -19,9 +20,9 @@ public class EditNoteRestController {
 	
 	@RequestMapping(value="editNote.do",method=RequestMethod.POST)
 	@ResponseBody
-	public void editNote(@RequestBody NoteDTO note)
+	public StatusDTO editNote(@RequestBody NoteDTO note)
 	{
-		userService.editNote(note);
+		return userService.editNote(note);
 	}
 	
 }

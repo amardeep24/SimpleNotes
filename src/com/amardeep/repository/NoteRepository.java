@@ -47,12 +47,12 @@ public class NoteRepository {
 				note.setNoteContent(entity.getProperty("noteContent").toString());
 			if(entity.getProperty("flag")!=null)
 				note.setFlag((Boolean)entity.getProperty("flag"));
-			if(entity.getProperty("noteImage")!=null)
+			/*if(entity.getProperty("noteImage")!=null)
 			{
 				Blob blob=(Blob)entity.getProperty("noteImage");
 				System.out.println(DatatypeConverter.printBase64Binary(blob.getBytes()));
 				note.setNoteImage(DatatypeConverter.printBase64Binary(blob.getBytes()));
-			}
+			}*/
 				
 			notes.add(note);
 		}
@@ -64,7 +64,7 @@ public class NoteRepository {
 		if(note!=null)
 		{
 		//generate random id
-		Random random=new Random();
+		/*Random random=new Random();
 		int randId=random.nextInt(100000)+1;
 		String noteId=String.valueOf(randId);
 		if(noteId.length()<6)
@@ -74,21 +74,21 @@ public class NoteRepository {
 			{
 				noteId=noteId+"0";
 			}
-		}
-		System.out.println(note.getNoteContent()+note.getNoteDate()+note.getNoteTitle()+noteId);
+		}*/
+		System.out.println(note.getNoteContent()+note.getNoteDate()+note.getNoteTitle()+note.getNoteId());
 		//converting base64 encoded image string data to byte array
-		System.out.println(note.getNoteImage());
-        byte[] imageBytes =  DatatypeConverter.parseBase64Binary(note.getNoteImage());
+		/*System.out.println(note.getNoteImage());
+        byte[] imageBytes =  DatatypeConverter.parseBase64Binary(note.getNoteImage());*/
 		//Using GAE datastore
-		Key noteKey = KeyFactory.createKey("Note", noteId);
+		Key noteKey = KeyFactory.createKey("Note",note.getNoteId());
 	    Entity noteEntity = new Entity("Note", noteKey);
-	    noteEntity.setProperty("noteId",noteId);
+	    noteEntity.setProperty("noteId",note.getNoteId());
 	    noteEntity.setProperty("noteTitle",note.getNoteTitle() );
 	    noteEntity.setProperty("noteContent",note.getNoteContent());
 	    noteEntity.setProperty("noteDate", note.getNoteDate());
 	    noteEntity.setProperty("flag", note.getFlag());
 	    noteEntity.setProperty("noteServerDate",new Date());
-	    noteEntity.setProperty("noteImage", new Blob(imageBytes));
+	    //noteEntity.setProperty("noteImage", new Blob(imageBytes));
 	    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 	    datastore.put(noteEntity);
 		status.setNoteTitle(note.getNoteTitle());
@@ -115,8 +115,10 @@ public class NoteRepository {
 		status.setStatus("Note deleted!");
 		return status;
 	}
-	public void editNote(NoteDTO note)
+	public StatusDTO editNote(NoteDTO note)
 	{
+		StatusDTO status=new StatusDTO();
+		status.setNoteTitle(note.getNoteTitle());
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 		Query query = new Query("Note");
 		query.addFilter("noteId", FilterOperator.EQUAL,note.getNoteId());
@@ -130,6 +132,8 @@ public class NoteRepository {
 		editedNote.setProperty("flag",true);
 		editedNote.setProperty("noteServerDate", new Date());
         datastore.put(editedNote);
+        status.setStatus("Note edited!");
+        return status;
 	}
 
 }

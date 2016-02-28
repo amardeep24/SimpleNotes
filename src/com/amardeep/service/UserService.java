@@ -10,5 +10,5 @@ public interface UserService {
 	public List<NoteDTO> getNotes();
 	public StatusDTO saveNote(NoteDTO note);
 	public StatusDTO deleteNote(NoteDTO note);
-	public void editNote(NoteDTO note);
+	public StatusDTO editNote(NoteDTO note);
 }

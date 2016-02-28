@@ -32,8 +32,8 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public void editNote(NoteDTO note) {
-		noteRepository.editNote(note);
+	public StatusDTO editNote(NoteDTO note) {
+		return noteRepository.editNote(note);
 	}
 
 }
