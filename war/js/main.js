@@ -126,6 +126,7 @@ main.controller('viewController',function($scope,$http,$window,deleteNoteService
 				 console.log("in else block of save in edit func");
 				 note.flag=true;
 				 note.noteDate=getDate();
+				 delete note.imageShow;
 				 editNoteService.editNote(note)
 				 .success(function (result)
 					{
