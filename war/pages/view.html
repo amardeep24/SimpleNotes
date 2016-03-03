@@ -7,15 +7,17 @@
 <ul class="view_note_ul">
 	<li data-ng-repeat="note in notes | filter:searchString" class="view_note_li">
 	<div data-ng-show="note.flag">
-	<b>Title:{{note.noteTitle}}</b>
+	<b>{{note.noteTitle}}</b>
 	<button class="view_notes_delete" data-ng-click="edit(note)"><em>Edit</em></button>
 	<button class="view_notes_delete" data-ng-click="delete(note)"><em>Delete</em></button>
 	<br/>
 	{{note.noteDate}}
 	<hr style="margin-right: 60%">
 	<em>{{note.noteContent}}</em>
-	<!-- <img data-ng-src="{{note.noteImage}}" class="compose_note_thumbnail">
-	{{note.noteImage}} -->
+	<br/>
+	<span data-ng-show="note.imageShow">
+	<img data-ng-src="{{note.noteImage}}" class="compose_note_thumbnail">
+	</span>
 	</div>
 	<div data-ng-hide="note.flag">
 		<label>Note title : </label>

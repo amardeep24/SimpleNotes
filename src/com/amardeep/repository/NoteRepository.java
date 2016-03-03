@@ -1,12 +1,12 @@
 package com.amardeep.repository;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Random;
 
-import javax.xml.bind.DatatypeConverter;
-
+import org.apache.commons.codec.binary.Base64;
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Repository;
 
 import com.amardeep.dto.NoteDTO;
@@ -24,6 +24,8 @@ import com.google.appengine.api.datastore.Query.FilterOperator;
 
 @Repository
 public class NoteRepository {
+	Logger log=Logger.getLogger(NoteRepository.class);
+	
 	public List<NoteDTO> getNotes()
 	{
 		List<NoteDTO> notes=new ArrayList<NoteDTO>();
@@ -47,12 +49,11 @@ public class NoteRepository {
 				note.setNoteContent(entity.getProperty("noteContent").toString());
 			if(entity.getProperty("flag")!=null)
 				note.setFlag((Boolean)entity.getProperty("flag"));
-			/*if(entity.getProperty("noteImage")!=null)
+			if(entity.getProperty("noteImage")!=null)
 			{
 				Blob blob=(Blob)entity.getProperty("noteImage");
-				System.out.println(DatatypeConverter.printBase64Binary(blob.getBytes()));
-				note.setNoteImage(DatatypeConverter.printBase64Binary(blob.getBytes()));
-			}*/
+				note.setNoteImage(new String(blob.getBytes()));
+			}
 				
 			notes.add(note);
 		}
@@ -61,6 +62,7 @@ public class NoteRepository {
 	public StatusDTO saveNote(NoteDTO note)
 	{
 		StatusDTO status=new StatusDTO();
+		byte[] imageBytes=null;
 		if(note!=null)
 		{
 		//generate random id
@@ -77,8 +79,13 @@ public class NoteRepository {
 		}*/
 		System.out.println(note.getNoteContent()+note.getNoteDate()+note.getNoteTitle()+note.getNoteId());
 		//converting base64 encoded image string data to byte array
-		/*System.out.println(note.getNoteImage());
-        byte[] imageBytes =  DatatypeConverter.parseBase64Binary(note.getNoteImage());*/
+		if(note.getNoteImage()!=null){
+			try {
+				imageBytes =  note.getNoteImage().getBytes("UTF-8");
+			} catch (UnsupportedEncodingException e) {
+				e.printStackTrace();
+			}
+		}
 		//Using GAE datastore
 		Key noteKey = KeyFactory.createKey("Note",note.getNoteId());
 	    Entity noteEntity = new Entity("Note", noteKey);
@@ -88,7 +95,8 @@ public class NoteRepository {
 	    noteEntity.setProperty("noteDate", note.getNoteDate());
 	    noteEntity.setProperty("flag", note.getFlag());
 	    noteEntity.setProperty("noteServerDate",new Date());
-	    //noteEntity.setProperty("noteImage", new Blob(imageBytes));
+	    if(note.getNoteImage()!=null)
+	    	noteEntity.setProperty("noteImage", new Blob(imageBytes));
 	    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 	    datastore.put(noteEntity);
 		status.setNoteTitle(note.getNoteTitle());

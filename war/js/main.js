@@ -19,10 +19,10 @@ main.config(['$routeProvider', function($routeProvider) {
 
 
 
-main.controller('composeController',function($scope,$http,noteSavingService)
+main.controller('composeController',function($scope,$http,$document,noteSavingService)
 		{
-			//$scope.image={};
-			//$scope.image.show=false;
+			$scope.image={};
+			$scope.image.show=false;
 			$scope.save=function()
 				{
 					$scope.note={};
@@ -32,7 +32,7 @@ main.controller('composeController',function($scope,$http,noteSavingService)
 					$scope.note.noteContent=$scope.noteContent;
 					$scope.note.noteDate=getDate();
 					$scope.note.flag=true;
-					//$scope.note.noteImage=$scope.image.result;
+					$scope.note.noteImage=$scope.image.result;
 					noteSavingService.saveNote($scope.note)
 					.success(function (result)
 					        {
@@ -40,29 +40,35 @@ main.controller('composeController',function($scope,$http,noteSavingService)
 			        	$scope.msg="compose_note_status_success";
 			        	$scope.noteTitle=null;
 			        	$scope.noteContent=null;
-			        	//$scope.image.show=false;
+			        	document.getElementById('notePicker').value = null;
+			        	$scope.image.show=false;
 			        });
 				}
 			$scope.clear=function()
 				{
 					$scope.noteTitle=null;
 					$scope.noteContent=null;
+					document.getElementById('notePicker').value = null;
 					$scope.result=null;
+					$scope.image.show=false;
 					$scope.note={};
 				}
-			/*$scope.uploadFile=function(files)
+			$scope.uploadFile=function(files)
 			{
 						var reader=new FileReader();
 						reader.onload=function(file)
 								{
 									$scope.$apply(function(){
-									$scope.image.result=reader.result;
-									console.log(reader.result);
+									//$scope.image.result=reader.result;
+									var image=new Image();
+									image.src=reader.result;
+									$scope.image.result=compress(image,10,'jpg');
+									//console.log(reader.result);
 									$scope.image.show=true;
 								});
 								}
 						reader.readAsDataURL(files[0]);
-			}*/
+			}
 			
 		});
 main.controller('viewController',function($scope,$http,$window,deleteNoteService,editNoteService)
@@ -75,10 +81,15 @@ main.controller('viewController',function($scope,$http,$window,deleteNoteService
 		        })
 		        .success(function (result)
 		        {
-		        	/*for(var i=0;i<result.length;i++)
+		        	for(var i=0;i<result.length;i++)
 		        		{
-		        			result[i].noteImage=formatImageUrl(result[i].noteImage);
-		        		}*/
+		        			if(result[i].noteImage === null)
+		        				{
+		        					result[i].imageShow=false;
+		        				}
+		        			else
+		        				result[i].imageShow=true;
+		        		}
 		        	$scope.notes = result;
 		        });
 			 $scope.delete=function(note)
@@ -234,4 +245,21 @@ function formatImageUrl(str)
 function generateNoteId()
 {
 	return Math.floor(100000 + Math.random() * 900000);
+}
+function compress(source_img_obj, quality, output_format){
+    
+	
+    var mime_type = "image/jpeg";
+    if(typeof output_format !== "undefined" && output_format=="png"){
+       mime_type = "image/png";
+    }
+    
+
+    var cvs = document.createElement('canvas');
+    cvs.width = source_img_obj.naturalWidth;
+    cvs.height = source_img_obj.naturalHeight;
+    var ctx = cvs.getContext("2d").drawImage(source_img_obj, 0, 0);
+    var newImageData = cvs.toDataURL(mime_type, quality/100);
+	// console.log(newImageData);
+    return newImageData;
 }

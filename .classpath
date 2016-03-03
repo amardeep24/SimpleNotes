@@ -35,5 +35,6 @@
 	<classpathentry kind="lib" path="war/WEB-INF/lib/spring-expression-3.2.10.RELEASE.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/spring-web-3.2.10.RELEASE.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/spring-webmvc-3.2.10.RELEASE.jar"/>
+	<classpathentry kind="lib" path="D:/Java Workspace/SimpleNote/war/WEB-INF/lib/commons-codec-1.10.jar"/>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
 </classpath>
