@@ -95,6 +95,7 @@ main.controller('viewController',function($scope,$http,$window,deleteNoteService
 			 $scope.delete=function(note)
 			 {
 				 var noteIndex=$scope.notes.indexOf(note);
+				 delete note.imageShow;
 				 deleteNoteService.deleteNote(note).
 				 success(function(result)
 						 {
