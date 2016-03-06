@@ -212,7 +212,7 @@ main.service('editNoteService',function($http)
 				})
 			}
 });
-function getDate()
+/*function getDate()
 {
     var today = new Date();
     var dd = today.getDate();
@@ -228,6 +228,27 @@ function getDate()
     var today = dd+'/'+mm+'/'+yyyy;
     return today;
 
+}*/
+function getDate()
+{
+	var date=new Date();
+	var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "June",
+	  "July", "Aug", "Sept", "Oct", "Nov", "Dec"];
+	var dayNames=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+	var year=date.getFullYear();
+	var month=monthNames[date.getMonth()];
+	var day=dayNames[date.getDay()];
+	var dayOfMonth=date.getDate();
+	var hours = date.getHours();
+	var minutes = date.getMinutes();
+	var ampm = hours >= 12 ? 'PM' : 'AM';
+	hours = hours % 12;
+	hours = hours ? hours : 12; // the hour '0' should be '12'
+	minutes = minutes < 10 ? '0'+minutes : minutes;
+	var time = hours + ':' + minutes + ' ' + ampm;
+	var today=day+', '+dayOfMonth+" "+month+" "+year+" "+time;
+	console.log(today);
+	return today;
 }
 function encodeURL(str){
     return str.replace(/\+/g, '-').replace(/\//g, '_').replace(/\=+$/, '');

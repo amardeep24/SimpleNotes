@@ -126,6 +126,7 @@ public class NoteRepository {
 	public StatusDTO editNote(NoteDTO note)
 	{
 		StatusDTO status=new StatusDTO();
+		byte[] imageBytes=null;
 		status.setNoteTitle(note.getNoteTitle());
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 		Query query = new Query("Note");
@@ -139,6 +140,17 @@ public class NoteRepository {
 		editedNote.setProperty("noteDate",note.getNoteDate());
 		editedNote.setProperty("flag",true);
 		editedNote.setProperty("noteServerDate", new Date());
+		if(note.getNoteImage()!=null)
+		{
+			if(note.getNoteImage()!=null){
+				try {
+					imageBytes =  note.getNoteImage().getBytes("UTF-8");
+				} catch (UnsupportedEncodingException e) {
+					e.printStackTrace();
+				}
+			}
+			editedNote.setProperty("noteImage", new Blob(imageBytes));
+		}
         datastore.put(editedNote);
         status.setStatus("Note edited!");
         return status;
