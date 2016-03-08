@@ -71,8 +71,9 @@ main.controller('composeController',function($scope,$http,$document,noteSavingSe
 			}
 			
 		});
-main.controller('viewController',function($scope,$http,$window,deleteNoteService,editNoteService)
+main.controller('viewController',function($scope,$http,$window,$interval,deleteNoteService,editNoteService)
 		{
+			$interval(function(){$scope.syncView()},5000);
 			 $scope.notes=[];
 			 $scope.result={};
 			 $http({
@@ -92,6 +93,26 @@ main.controller('viewController',function($scope,$http,$window,deleteNoteService
 		        		}
 		        	$scope.notes = result;
 		        });
+			 $scope.syncView=function(){
+				 console.log("interval func fired");
+				 $http({
+			            method: 'GET',
+			            url: '/pages/getNotes.do',
+			        })
+			        .success(function (result)
+			        {
+			        	for(var i=0;i<result.length;i++)
+			        		{
+			        			if(result[i].noteImage === null)
+			        				{
+			        					result[i].imageShow=false;
+			        				}
+			        			else
+			        				result[i].imageShow=true;
+			        		}
+			        	$scope.notes = result;
+			        });
+			 }
 			 $scope.delete=function(note)
 			 {
 				 var noteIndex=$scope.notes.indexOf(note);

@@ -50,7 +50,8 @@
 }
 .compose_note_thumbnail
 {
-	height: 100px;
+	height: 300px;
+	width:300px
     border: 1px solid #000;
     margin: 10px 5px 0 0;
 }
