@@ -4,15 +4,15 @@ main.config(['$routeProvider', function($routeProvider) {
 	   $routeProvider.
 	   
 	   when('/compose', {
-	      templateUrl: 'compose.html', controller: 'composeController'
+	      templateUrl: '../pages/compose.html', controller: 'composeController'
 	   }).
 	   
 	   when('/view', {
-	      templateUrl: 'view.html', controller: 'viewController'
+	      templateUrl: '../pages/view.html', controller: 'viewController'
 	   }).
 	   
 	   when('/about', {
-		      templateUrl: 'about.html', controller: 'aboutController'
+		      templateUrl: '../pages/about.html', controller: 'aboutController'
 		   });
 		
 	}]);
@@ -73,12 +73,12 @@ main.controller('composeController',function($scope,$http,$document,noteSavingSe
 		});
 main.controller('viewController',function($scope,$http,$window,$interval,deleteNoteService,editNoteService)
 		{
-			$interval(function(){$scope.syncView()},5000);
+			 var promise;
 			 $scope.notes=[];
 			 $scope.result={};
 			 $http({
 		            method: 'GET',
-		            url: '/pages/getNotes.do',
+		            url: '/getNotes',
 		        })
 		        .success(function (result)
 		        {
@@ -93,11 +93,13 @@ main.controller('viewController',function($scope,$http,$window,$interval,deleteN
 		        		}
 		        	$scope.notes = result;
 		        });
+			
+				 
 			 $scope.syncView=function(){
 				 console.log("interval func fired");
 				 $http({
 			            method: 'GET',
-			            url: '/pages/getNotes.do',
+			            url: '/getNotes',
 			        })
 			        .success(function (result)
 			        {
@@ -113,11 +115,27 @@ main.controller('viewController',function($scope,$http,$window,$interval,deleteN
 			        	$scope.notes = result;
 			        });
 			 }
+			 //interval start
+			 $scope.syncStart = function() {
+			      // stops any running interval to avoid two intervals running at the same time
+			      $scope.syncStop(); 
+			      
+			      // store the interval promise
+			      promise = $interval(function(){$scope.syncView()},15000);
+			    };
+			    // stops the interval
+			    $scope.syncStop = function() {
+			      $interval.cancel(promise);
+			    };
+			    $scope.syncStart();
+			    $scope.$on('$destroy', function() {
+			        $scope.syncStop();
+			      });
 			 $scope.delete=function(note)
 			 {
 				 var noteIndex=$scope.notes.indexOf(note);
 				 delete note.imageShow;
-				 deleteNoteService.deleteNote(note).
+				 deleteNoteService.deleteNote(note.noteId).
 				 success(function(result)
 						 {
 					 		//$window.alert(result.noteTitle+" "+result.status);
@@ -134,6 +152,7 @@ main.controller('viewController',function($scope,$http,$window,$interval,deleteN
 			 $scope.edit=function(note)
 			 {
 				 note.flag=false;
+				 $scope.syncStop();
 			 }
 			 $scope.save=function(note)
 			 {
@@ -152,18 +171,22 @@ main.controller('viewController',function($scope,$http,$window,$interval,deleteN
 				 .success(function (result)
 					{
 			        	note.flag=true;
+			        	$scope.syncStart();
 			        });
 				 }
 			 }
 			 $scope.cancel=function(note)
 			 {
 				 note.flag=true;
+				 $scope.syncStart();
 			 }
 			 $scope.clear=function(note)
 			 {
 				 note.noteTitle=null;
 				 note.noteContent=null;
 			 }
+			
+				 
 			 /*$scope.editedNote={};
 			 $scope.edit=function(oldNote)
 				 {
@@ -205,7 +228,7 @@ main.service('noteSavingService',function($http)
 			{
 				return $http({
 					method:'POST',
-					url:'/pages/saveNote.do',
+					url:'/saveNote',
 					data:note
 				});
 				
@@ -213,12 +236,12 @@ main.service('noteSavingService',function($http)
 		});
 main.service('deleteNoteService',function($http)
 		{
-			this.deleteNote=function(note)
+			this.deleteNote=function(noteId)
 			{
 				return $http({
-					method:'POST',
-					url:'/pages/deleteNote.do',
-					data:note
+					method:'DELETE',
+					url:'/deleteNote/'+noteId,
+					//data:note
 				})
 			}
 		});
@@ -227,8 +250,8 @@ main.service('editNoteService',function($http)
 			this.editNote=function(note)
 			{
 				return $http({
-					method:'POST',
-					url:'/pages/editNote.do',
+					method:'PUT',
+					url:'/updateNote',
 					data:note
 				})
 			}

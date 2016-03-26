@@ -8,6 +8,11 @@
   -->
   <threadsafe>true</threadsafe>
 
+  <!-- Configure java.util.logging -->
+  <system-properties>
+    <property name="java.util.logging.config.file" value="WEB-INF/logging.properties"/>
+  </system-properties>
+
   <!--
     HTTP Sessions are disabled by default. To enable HTTP sessions specify:
 
@@ -22,5 +27,11 @@
     stale session data. For details, see
     http://code.google.com/appengine/docs/java/config/appconfig.html#Enabling_Sessions
   -->
+  <static-files>
+  <include path="/pages/**" />
+  <include path="/js/**" />
+  <include path="/style/**" />
+  <include path="/favicon.ico" />
+  </static-files>
 
 </appengine-web-app>
