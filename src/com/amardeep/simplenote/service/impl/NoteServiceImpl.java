@@ -8,6 +8,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.amardeep.simplenote.exception.NoteNotFoundException;
 import com.amardeep.simplenote.model.Note;
 import com.amardeep.simplenote.model.Status;
 import com.amardeep.simplenote.repository.NoteRepository;
@@ -29,8 +30,8 @@ public class NoteServiceImpl implements NoteService {
 	}
 
 	@Override
-	public Note getNote(String noteId) {
-		return null;
+	public Note getNote(String noteId)throws NoteNotFoundException {
+		return noteRepository.getNote(noteId);
 	}
 
 	@Override
@@ -44,7 +45,7 @@ public class NoteServiceImpl implements NoteService {
 	}
 
 	@Override
-	public Status deleteNote(String noteId) {
+	public Status deleteNote(String noteId) throws NoteNotFoundException{
 		return noteRepository.deleteNote(noteId);
 	}
 

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.amardeep.simplenote.exception.NoteNotFoundException;
 import com.amardeep.simplenote.model.Note;
 import com.amardeep.simplenote.model.Status;
 import com.amardeep.simplenote.service.NoteService;
@@ -35,7 +36,7 @@ public class NoteController {
 
 	
 	@RequestMapping(value="/getNote/{noteId}", method=RequestMethod.GET)
-	public @ResponseBody Note getNote(@PathVariable("noteId") String noteId) {
+	public @ResponseBody Note getNote(@PathVariable("noteId") String noteId)throws NoteNotFoundException {
 		return noteService.getNote(noteId);
 	}
 
@@ -52,7 +53,7 @@ public class NoteController {
 	}
 
 	@RequestMapping(value="/deleteNote/{noteId}", method=RequestMethod.DELETE)
-	public @ResponseBody Status deleteNote(@PathVariable("noteId") String noteId)
+	public @ResponseBody Status deleteNote(@PathVariable("noteId") String noteId)throws NoteNotFoundException
 	{
 		return noteService.deleteNote(noteId);
 	}

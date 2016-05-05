@@ -8,6 +8,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Repository;
 
+import com.amardeep.simplenote.exception.NoteNotFoundException;
 import com.amardeep.simplenote.model.Note;
 import com.amardeep.simplenote.model.Status;
 import com.google.appengine.api.datastore.Blob;
@@ -108,7 +109,7 @@ public class NoteRepository {
 			return status;
 		}
 	}
-	public Status deleteNote(String noteId)
+	public Status deleteNote(String noteId) throws NoteNotFoundException
 	{
 		Status status=new Status();
 		status.setNoteTitle(noteId);
@@ -117,9 +118,12 @@ public class NoteRepository {
 		query.addFilter("noteId", FilterOperator.EQUAL,noteId);
 		PreparedQuery pq = datastore.prepare(query);
 		Entity noteEntity = pq.asSingleEntity();
+		if(noteEntity!=null){
 		datastore.delete(noteEntity.getKey());
 		status.setStatus("Note deleted!");
 		return status;
+		}
+		throw new NoteNotFoundException("Cannot delete note as no note exits for the given Id.");
 	}
 	public Status updateNote(Note note)
 	{
@@ -152,6 +156,32 @@ public class NoteRepository {
         datastore.put(editedNote);
         status.setStatus("Note edited!");
         return status;
+	}
+	public Note getNote(String noteId) throws NoteNotFoundException
+	{
+		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+		Query query = new Query("Note");
+		query.addFilter("noteId", FilterOperator.EQUAL,noteId);
+		PreparedQuery pq = datastore.prepare(query);
+		Entity entity = pq.asSingleEntity();
+		if(entity!=null){
+		Note note=new Note();
+		note.setNoteId(entity.getProperty("noteId").toString());
+		if(entity.getProperty("noteTitle")!=null)
+			note.setNoteTitle(entity.getProperty("noteTitle").toString());
+		note.setNoteDate(entity.getProperty("noteDate").toString());
+		if(entity.getProperty("noteContent")!=null)
+			note.setNoteContent(entity.getProperty("noteContent").toString());
+		if(entity.getProperty("flag")!=null)
+			note.setFlag((Boolean)entity.getProperty("flag"));
+		if(entity.getProperty("noteImage")!=null)
+		{
+			Blob blob=(Blob)entity.getProperty("noteImage");
+			note.setNoteImage(new String(blob.getBytes()));
+		}
+		return note;
+		}
+		throw new NoteNotFoundException("Note not found for given Id.");
 	}
 
 }
