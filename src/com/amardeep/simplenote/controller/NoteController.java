@@ -32,7 +32,7 @@ public class NoteController {
 	@RequestMapping(value = "/getNotes", method = RequestMethod.GET)
 	public ResponseEntity<List<Note>> getNotes() {
 		ResponseEntity<List<Note>> allNotes = new ResponseEntity<List<Note>>(
-				noteService.getNotes(), HttpStatus.FOUND);
+				noteService.getNotes(), HttpStatus.OK);
 		return allNotes;
 
 	}
@@ -41,7 +41,7 @@ public class NoteController {
 	public ResponseEntity<Note> getNote(@PathVariable("noteId") String noteId)
 			throws NoteNotFoundException {
 		ResponseEntity<Note> note = new ResponseEntity<Note>(
-				noteService.getNote(noteId), HttpStatus.FOUND);
+				noteService.getNote(noteId), HttpStatus.OK);
 		return note;
 	}
 
@@ -56,7 +56,7 @@ public class NoteController {
 	@RequestMapping(value = "/updateNote", method = RequestMethod.PUT)
 	public ResponseEntity<Status> updateNote(@RequestBody Note note) {
 		ResponseEntity<Status> status = new ResponseEntity<Status>(
-				noteService.updateNote(note), HttpStatus.CREATED);
+				noteService.updateNote(note), HttpStatus.OK);
 		return status;
 	}
 
@@ -64,7 +64,7 @@ public class NoteController {
 	public ResponseEntity<Status> deleteNote(@PathVariable("noteId") String noteId)
 			throws NoteNotFoundException {
 		ResponseEntity<Status> status = new ResponseEntity<Status>(
-				noteService.deleteNote(noteId), HttpStatus.GONE);
+				noteService.deleteNote(noteId), HttpStatus.OK);
 		return status;
 	}
 }
